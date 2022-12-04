@@ -4,7 +4,7 @@
 */
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { crearCasa } = require('../controllers/homes');
+const { crearCasa, traerCasa } = require('../controllers/homes');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
@@ -12,11 +12,15 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 const router = Router();
 
 
-
+router.get(
+    '/:userId', 
+    traerCasa 
+);
 router.post(
     '/new/home', 
     crearCasa 
 );
+
 
 
 
