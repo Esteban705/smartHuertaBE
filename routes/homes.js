@@ -4,6 +4,7 @@
 */
 const { Router } = require('express');
 const { check } = require('express-validator');
+const { crearCasa } = require('../controllers/homes');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
