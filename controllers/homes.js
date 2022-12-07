@@ -2,7 +2,13 @@ const { response } = require("express");
 const mongoose = require("mongoose");
 const Homes = require("../models/Homes");
 
-const crearCasa = async (req, res = response) => {
+
+class Casas {
+
+
+
+
+  static crearCasa = async (req, res = response) => {
   try {
     let home = req.body;
 
@@ -23,7 +29,7 @@ const crearCasa = async (req, res = response) => {
   }
 };
 
-const traerCasa = async (req, res = response) => {
+static traerCasa = async (req, res = response) => {
   try {
     let { userId } = req.params;
     const foundUser = await Homes.find({ userId: userId });
@@ -41,7 +47,8 @@ const traerCasa = async (req, res = response) => {
   }
 };
 
+
+}
 module.exports = {
-  crearCasa,
-  traerCasa,
+  Casas
 };

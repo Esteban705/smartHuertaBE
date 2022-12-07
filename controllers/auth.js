@@ -2,8 +2,11 @@ const { response } = require('express');
 const bcrypt = require('bcryptjs');
 const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/jwt');
+
+
+ class UserController { 
  
-const crearUsuario = async(req, res = response ) => {
+static crearUsuario = async(req, res = response ) => {
 
     const { email, password } = req.body;
 
@@ -46,7 +49,7 @@ const crearUsuario = async(req, res = response ) => {
 }
 
 
-const loginUsuario = async(req, res = response ) => {
+ static loginUsuario = async(req, res = response ) => {
 
     const { email, password } = req.body;
 
@@ -93,7 +96,7 @@ const loginUsuario = async(req, res = response ) => {
 }
 
 
-const revalidarToken = async (req, res = response ) => {
+static revalidarToken = async (req, res = response ) => {
 
     const { uid, name } = req;
 
@@ -107,10 +110,6 @@ const revalidarToken = async (req, res = response ) => {
 }
 
 
-
-
-module.exports = {
-    crearUsuario,
-    loginUsuario,
-    revalidarToken
 }
+
+module.exports = UserController;
