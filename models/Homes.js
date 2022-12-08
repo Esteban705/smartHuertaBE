@@ -11,6 +11,15 @@ const HomesSchema = new Schema({
         require: true,
         unique: true
     },
+    name: {
+        type: String,
+        require: true,
+        unique: false
+    },
+    isSpecial: {
+        type: Boolean,
+        require: true,
+    },
     userId: { 
         type: mongoose.Schema.Types.ObjectId,
         ref: "Usuarios"

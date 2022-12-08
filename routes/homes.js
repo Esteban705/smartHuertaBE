@@ -16,9 +16,17 @@ router.get(
     '/:userId', 
     Casas.traerCasa 
 );
+router.get(
+    '/', 
+    Casas.traerCasas 
+);
 router.post(
     '/new/home', 
     Casas.crearCasa 
+);
+router.put(
+    '/delete/:homeId', 
+    Casas.eliminarCasa 
 );
 
 

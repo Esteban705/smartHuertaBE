@@ -1,8 +1,7 @@
 const { response } = require('express');
 const bcrypt = require('bcryptjs');
-const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/jwt');
-
+const { Usuarios } = require("../models/Usuario");
 
  class UserController { 
  
@@ -11,7 +10,7 @@ static crearUsuario = async(req, res = response ) => {
     const { email, password } = req.body;
 
     try {
-        let usuario = await Usuario.findOne({ email });
+        let usuario = await Usuarios.findOne({ email });
 
         if ( usuario ) {
             return res.status(400).json({
@@ -20,7 +19,7 @@ static crearUsuario = async(req, res = response ) => {
             });
         }
 
-        usuario = new Usuario( req.body );
+        usuario = new Usuarios( req.body );
     
         // Encriptar contraseña
         const salt = bcrypt.genSaltSync();
@@ -30,13 +29,13 @@ static crearUsuario = async(req, res = response ) => {
         await usuario.save();
 
         // Generar JWT
-        const token = await generarJWT( usuario.id, usuario.name );
+       /*  const token = await generarJWT( usuario.id, usuario.name ); */
     
         res.status(201).json({
             ok: true,
             uid: usuario.id,
             name: usuario.name,
-            token
+            /* token */
         })
         
     } catch (error) {
@@ -55,7 +54,7 @@ static crearUsuario = async(req, res = response ) => {
 
     try {
         
-        const usuario = await Usuario.findOne({ email });
+        const usuario = await Usuarios.findOne({ email });
 
         if ( !usuario ) {
             return res.status(400).json({
@@ -75,13 +74,13 @@ static crearUsuario = async(req, res = response ) => {
         }
 
         // Generar JWT
-        const token = await generarJWT( usuario.id, usuario.name );
+     /*    const token = await generarJWT( usuario.id, usuario.name ); */
 
         res.json({
             ok: true,
             uid: usuario.id,
             name: usuario.name,
-            token
+       /*      token */
         })
 
 

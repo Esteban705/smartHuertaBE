@@ -14,6 +14,7 @@ class Casas {
       res.status(201).json({
         ok: true,
         msg: "Casa agregada con exito",
+        data: home,
       });
     } catch (error) {
       console.log(error);
@@ -33,9 +34,15 @@ class Casas {
         { name: 1, email: 1 }
       );
 
+      const mapperUser = {
+        id: foundUser[0]._id,
+        geometry: [foundUser[0].latitude, foundUser[0].longitude],
+        dataUser: foundUser[0].userId,
+      };
+
       res.status(201).json({
         ok: true,
-        data: foundUser,
+        data: mapperUser,
       });
     } catch (error) {
       console.log(error);
@@ -53,9 +60,21 @@ class Casas {
         email: 1,
       });
 
+      const allHomes = foundCasas.map((casa) => {
+        const mapperHome = {
+          name: casa.name,
+          id: casa._id,
+          geometry: [casa.latitude, casa.longitude],
+          dataUser: casa.userId,
+          isSpecial: casa.isSpecial,
+        };
+
+        return mapperHome;
+      });
+
       res.status(201).json({
         ok: true,
-        data: foundCasas,
+        data: allHomes,
       });
     } catch (error) {
       console.log(error);

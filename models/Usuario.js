@@ -21,7 +21,7 @@ const UsuarioSchema = new Schema({
 
 const Usuarios = mongoose.model("Usuarios", UsuarioSchema);
 
-module.exports = {Usuarios};
+module.exports = { Usuarios };
 
 
 
