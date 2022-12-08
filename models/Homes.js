@@ -1,6 +1,7 @@
-const { Schema, model, ObjectId } = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const HomesSchema = Schema({
+const HomesSchema = new Schema({
     latitude: {
         type: String,
         require: true
@@ -10,12 +11,14 @@ const HomesSchema = Schema({
         require: true,
         unique: true
     },
-    userId: {
-        type: ObjectId, 
-        require: true
-    }
+    userId: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Usuarios"
+     }
 });
 
 
-module.exports = model('Homes', HomesSchema );
+const Homes = mongoose.model("Homes", HomesSchema);
+
+module.exports = {Homes};
 
