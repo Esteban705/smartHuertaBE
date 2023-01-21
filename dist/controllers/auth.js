@@ -18,7 +18,7 @@ const Usuario_1 = require("../models/Usuario");
 class UserController {
     crearUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, password } = req.body;
+            const { email, password, name } = req.body;
             try {
                 let usuario = yield Usuario_1.Usuarios.findOne({ email });
                 if (usuario) {
@@ -27,19 +27,15 @@ class UserController {
                         msg: "El usuario ya existe",
                     });
                 }
-                usuario = new Usuario_1.Usuarios(req.body);
-                // Encriptar contraseña
                 const salt = bcryptjs_1.default.genSaltSync();
-                usuario.password = bcryptjs_1.default.hashSync(password, salt);
-                yield usuario.save();
-                // Generar JWT
-                /*  const token = await generarJWT( usuario.id, usuario.name ); */
-                res.status(201).json({
-                    ok: true,
-                    uid: usuario.id,
-                    name: usuario.name,
-                    /* token */
+                const passwordHash = bcryptjs_1.default.hashSync(password, salt);
+                yield Usuario_1.Usuarios.create({
+                    name,
+                    password: passwordHash,
+                    email,
                 });
+                const { id } = yield Usuario_1.Usuarios.findOne({ name });
+                res.status(201).send({ ok: true, name, email, id });
             }
             catch (error) {
                 console.log(error);
@@ -69,14 +65,16 @@ class UserController {
                         msg: "Password incorrecto",
                     });
                 }
+                const userData = {
+                    email: usuario.email,
+                    isNew: false,
+                    uId: usuario.id,
+                    name: usuario.name,
+                    ok: true,
+                };
                 // Generar JWT
                 /*    const token = await generarJWT( usuario.id, usuario.name ); */
-                res.json({
-                    ok: true,
-                    uid: usuario.id,
-                    name: usuario.name,
-                    /*      token */
-                });
+                return res.status(200).send(userData);
             }
             catch (error) {
                 console.log(error);
