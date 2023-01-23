@@ -1,16 +1,14 @@
-
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { generarJWT } from "../../helpers/jwt";
 import { Usuarios } from "../models/Usuario";
 
 export class UserController {
-  
   public async crearUsuario(
     req: Request,
     res: Response
   ): Promise<Response<any>> {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
     try {
       let usuario = await Usuarios.findOne({ email });
@@ -22,23 +20,18 @@ export class UserController {
         });
       }
 
-      usuario = new Usuarios(req.body);
-
-      // Encriptar contraseña
       const salt = bcrypt.genSaltSync();
-      usuario.password = bcrypt.hashSync(password, salt);
+      const passwordHash = bcrypt.hashSync(password, salt);
 
-      await usuario.save();
-
-      // Generar JWT
-      /*  const token = await generarJWT( usuario.id, usuario.name ); */
-
-      res.status(201).json({
-        ok: true,
-        uid: usuario.id,
-        name: usuario.name,
-        /* token */
+      await Usuarios.create({
+        name,
+        password: passwordHash,
+        email,
       });
+
+      const { id } = await Usuarios.findOne({ name });
+
+      res.status(201).send({ ok: true, name, email, id });
     } catch (error) {
       console.log(error);
       res.status(500).json({
@@ -74,15 +67,15 @@ export class UserController {
         });
       }
 
-      // Generar JWT
-      /*    const token = await generarJWT( usuario.id, usuario.name ); */
-
-      res.json({
-        ok: true,
-        uid: usuario.id,
+      const userData = {
+        email: usuario.email,
+        isNew: false,
+        uId: usuario.id,
         name: usuario.name,
-        /*      token */
-      });
+        ok: true,
+      };
+
+      return res.status(200).send(userData);
     } catch (error) {
       console.log(error);
       res.status(500).json({
@@ -105,4 +98,3 @@ export class UserController {
     })
 } */
 }
-
