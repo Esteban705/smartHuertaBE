@@ -39,17 +39,18 @@ export class HomeControllers {
     res: Response
   ): Promise<Response<any>> {
     try {
+      
       const { userId } = req.params;
 
-      const foundUser = await Homes.find({ userId: userId as unknown as ObjectId }).populate(
+      const foundUser = await Homes.findOne({ userId: userId as unknown as ObjectId }).populate(
         "userId",
         { name: 1, email: 1 }
       );
 
       const mapperUser = {
-        id: foundUser[0]._id,
-        geometry: [foundUser[0].latitude, foundUser[0].longitude],
-        dataUser: foundUser[0].userId,
+        id: foundUser._id,
+        geometry: [foundUser.latitude, foundUser.longitude],
+        dataUser: foundUser.userId,
       };
 
       return(

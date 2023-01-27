@@ -18,6 +18,15 @@ const usuarioSchema: Schema<IUser> = new Schema({
     type: String,
     require: true,
   },
+  description:{
+    type: String,
+    require: false,
+  },
+  imgId: { 
+    type: Schema.Types.ObjectId,
+    ref: "Images",
+    require: false,
+ }
 });
 
 export const Usuarios = model<IUser>("Usuarios", usuarioSchema);

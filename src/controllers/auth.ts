@@ -70,7 +70,7 @@ export class UserController {
       const userData = {
         email: usuario.email,
         isNew: false,
-        uId: usuario.id,
+        id: usuario.id,
         name: usuario.name,
         ok: true,
       };

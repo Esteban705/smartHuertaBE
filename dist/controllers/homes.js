@@ -38,11 +38,11 @@ class HomeControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { userId } = req.params;
-                const foundUser = yield Homes_1.Homes.find({ userId: userId }).populate("userId", { name: 1, email: 1 });
+                const foundUser = yield Homes_1.Homes.findOne({ userId: userId }).populate("userId", { name: 1, email: 1 });
                 const mapperUser = {
-                    id: foundUser[0]._id,
-                    geometry: [foundUser[0].latitude, foundUser[0].longitude],
-                    dataUser: foundUser[0].userId,
+                    id: foundUser._id,
+                    geometry: [foundUser.latitude, foundUser.longitude],
+                    dataUser: foundUser.userId,
                 };
                 return (res.status(201).json({
                     ok: true,
