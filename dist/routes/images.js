@@ -10,7 +10,9 @@ class ImagenesRoutes {
         this.routes();
     }
     routes() {
-        this.router.post('/', this.ImageController.UploadImage);
+        this.router.get("/:userId", this.ImageController.getImageToUser);
+        this.router.post("/", this.ImageController.UploadImage);
+        this.router.put("/:imageId", this.ImageController.deleteImage);
     }
 }
 exports.ImagenesRoutes = ImagenesRoutes;

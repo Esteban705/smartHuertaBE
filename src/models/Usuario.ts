@@ -1,6 +1,5 @@
 import { Document, model, Schema } from "mongoose";
 
-
 export interface IUser extends Document {
   name: string;
   email: string;
@@ -18,16 +17,15 @@ const usuarioSchema: Schema<IUser> = new Schema({
     type: String,
     require: true,
   },
-  description:{
+  description: {
     type: String,
-    require: false,
+    require: true,
   },
-  imgId: { 
+  imgId: {
     type: Schema.Types.ObjectId,
     ref: "Images",
-    require: false,
- }
+    require: true,
+  },
 });
 
 export const Usuarios = model<IUser>("Usuarios", usuarioSchema);
-

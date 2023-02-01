@@ -83,6 +83,28 @@ class UserController {
             }
         });
     }
+    getDataUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { userId } = req.params;
+                const usuario = yield Usuario_1.Usuarios.findOne({ _id: userId });
+                if (!usuario) {
+                    return res.status(400).json({
+                        ok: false,
+                        msg: "El usuario no existe",
+                    });
+                }
+                return res.status(200).send(usuario);
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    ok: false,
+                    msg: "Por favor hable con el administrador",
+                });
+            }
+        });
+    }
 }
 exports.UserController = UserController;
 //# sourceMappingURL=auth.js.map

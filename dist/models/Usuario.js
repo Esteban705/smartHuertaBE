@@ -13,6 +13,15 @@ const usuarioSchema = new mongoose_1.Schema({
         type: String,
         require: true,
     },
+    description: {
+        type: String,
+        require: true,
+    },
+    imgId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "Images",
+        require: true,
+    }
 });
 exports.Usuarios = (0, mongoose_1.model)("Usuarios", usuarioSchema);
 //# sourceMappingURL=Usuario.js.map
