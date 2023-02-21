@@ -1,0 +1,1 @@
+//# sourceMappingURL=categoriesType.js.map
