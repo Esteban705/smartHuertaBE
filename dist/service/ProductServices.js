@@ -16,7 +16,7 @@ class ProductService {
     crearProducto(dataProduct) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { images, home } = dataProduct;
+                const { images, home, userId } = dataProduct;
                 let imagesCreated = [];
                 for (const img of images) {
                     const dataImg = img.dataImg;
@@ -24,19 +24,22 @@ class ProductService {
                         dataImg,
                         home,
                     });
-                    console.log(creatingImg);
-                    imagesCreated.push(creatingImg);
+                    imagesCreated.push(creatingImg._id);
                 }
-                const createProduct = yield Product_1.Product.create(Object.assign(Object.assign({}, dataProduct), { images: imagesCreated }));
+                const createProduct = yield Product_1.Product.create(Object.assign(Object.assign({}, dataProduct), { idHome: home, idUser: userId, idImagen: imagesCreated }));
+                console.log({ createProduct });
                 return createProduct;
             }
             catch (error) {
                 console.log(error);
-                /* res.status(500).json({
-                      ok: false,
-                      msg: "Por favor hable con el administrador",
-                    }); */
+                throw new Error("ValidateData is fail");
             }
+        });
+    }
+    eliminarProducto(productId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const eliminatingProducto = yield Product_1.Product.findByIdAndDelete({ _id: productId });
+            return eliminatingProducto;
         });
     }
 }

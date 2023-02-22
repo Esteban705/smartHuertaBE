@@ -13,9 +13,7 @@ const ImageSchema = new mongoose_1.Schema({
         ref: "Usuarios"
     },
     home: {
-        type: [
-            { homeId: mongoose_1.Schema.Types.ObjectId }
-        ],
+        type: [mongoose_1.Schema.Types.ObjectId],
         require: false,
         ref: "Homes"
     },

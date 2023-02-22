@@ -22,8 +22,25 @@ class ProductController {
                 const validateDataProduct = productValidation.validateDataIsNotEmpty(dataProduct);
                 if (!validateDataProduct)
                     throw new Error("ValidateData is fail");
-                const createProduct = productService.crearProducto(dataProduct);
+                const createProduct = yield productService.crearProducto(dataProduct);
                 return res.status(201).send({ ok: true, createProduct });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    ok: false,
+                    msg: "Por favor hable con el administrador",
+                });
+            }
+        });
+    }
+    eliminarProducto(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { productId } = req.params;
+                const productService = new ProductServices_1.ProductService();
+                const productEliminated = yield productService.eliminarProducto(productId);
+                return res.status(201).send({ ok: true, productEliminated });
             }
             catch (error) {
                 console.log(error);

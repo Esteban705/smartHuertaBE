@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongoose';
 import { Product } from "./../models/Product";
 import { IDataProduct } from "../types/ProductType";
 import { Images } from "../models/Images";
@@ -33,5 +34,15 @@ export class ProductService {
       console.log(error);
       throw new Error("ValidateData is fail");
     }
+  }
+
+
+  public async eliminarProducto(productId:ObjectId):Promise<any> {
+
+    const eliminatingProducto = await Product.findByIdAndDelete({_id: productId})
+
+    return eliminatingProducto
+
+
   }
 }

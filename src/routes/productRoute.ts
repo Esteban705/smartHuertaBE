@@ -12,5 +12,6 @@ export class ProductRoute {
 
   routes() {
     this.router.post("/", this.ProductController.crearProducto);
+    this.router.delete("/:productId", this.ProductController.eliminarProducto);
   }
 }
