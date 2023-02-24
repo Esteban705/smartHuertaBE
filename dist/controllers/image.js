@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ImageController = void 0;
 const Images_1 = require("../models/Images");
-const Usuario_1 = require("../models/Usuario");
 class ImageController {
     UploadImage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -23,7 +22,6 @@ class ImageController {
                     dataImg,
                     userId,
                 });
-                const addImgToUser = yield Usuario_1.Usuarios.findById({ userId }, { $set: { imgId: createImg } });
                 console.log("Imagen Creada");
                 return res.status(201).send({ ok: true, createImg });
             }

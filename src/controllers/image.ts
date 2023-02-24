@@ -2,17 +2,19 @@ import { Request, Response } from "express";
 import { ObjectId } from "mongoose";
 import { Images } from "../models/Images";
 
-type CreateImg = {
+export type CreateImg = {
   dataImg: string;
-  userId: ObjectId;
+  userId?: ObjectId;
+  homeId?: ObjectId;
 };
 
-type ResponseImg = {
+export type ResponseImg = {
   createImg: CreateImg;
   ok: boolean;
 };
 
 export class ImageController {
+  
   public async UploadImage(
     req: Request,
     res: Response

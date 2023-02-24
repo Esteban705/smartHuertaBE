@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const Usuario_1 = require("../models/Usuario");
+const Images_1 = require("../models/Images");
 class UserController {
     crearUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -33,6 +34,7 @@ class UserController {
                     name,
                     password: passwordHash,
                     email,
+                    description: "",
                 });
                 const { id } = yield Usuario_1.Usuarios.findOne({ name });
                 res.status(201).send({ ok: true, name, email, id });
@@ -48,13 +50,13 @@ class UserController {
     }
     loginUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, password } = req.body;
+            const { password, name } = req.body;
             try {
-                const usuario = yield Usuario_1.Usuarios.findOne({ email });
+                const usuario = yield Usuario_1.Usuarios.findOne({ name });
                 if (!usuario) {
                     return res.status(400).json({
                         ok: false,
-                        msg: "El usuario no existe con ese email",
+                        msg: "El usuario no existe",
                     });
                 }
                 // Confirmar los passwords
@@ -88,13 +90,16 @@ class UserController {
             try {
                 const { userId } = req.params;
                 const usuario = yield Usuario_1.Usuarios.findOne({ _id: userId });
+                const imga = yield Images_1.Images.findOne({
+                    userId: userId,
+                });
                 if (!usuario) {
                     return res.status(400).json({
                         ok: false,
                         msg: "El usuario no existe",
                     });
                 }
-                return res.status(200).send(usuario);
+                return res.status(200).send({ ok: true, usuario, imga });
             }
             catch (error) {
                 console.log(error);

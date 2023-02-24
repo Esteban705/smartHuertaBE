@@ -1,4 +1,4 @@
-import { Document, model, Schema } from "mongoose";
+import { Document, isValidObjectId, model, Schema } from "mongoose";
 
 export interface IUser extends Document {
   name: string;
@@ -19,12 +19,13 @@ const usuarioSchema: Schema<IUser> = new Schema({
   },
   description: {
     type: String,
-    require: true,
+    default: ""
   },
   imgId: {
     type: Schema.Types.ObjectId,
     ref: "Images",
     require: true,
+    default: null
   },
 });
 

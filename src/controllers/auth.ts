@@ -48,15 +48,15 @@ export class UserController {
     req: Request,
     res: Response
   ): Promise<Response<any>> {
-    const { email, password } = req.body;
+    const { password, name } = req.body;
 
     try {
-      const usuario = await Usuarios.findOne({ email });
+      const usuario = await Usuarios.findOne({ name });
 
       if (!usuario) {
         return res.status(400).json({
           ok: false,
-          msg: "El usuario no existe con ese email",
+          msg: "El usuario no existe",
         });
       }
 

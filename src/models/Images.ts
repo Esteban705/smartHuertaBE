@@ -3,6 +3,7 @@ import { Document, model, Schema } from "mongoose";
 export interface Image extends Document {
   dataImg: string;
   userId: Schema.Types.ObjectId;
+  home: Schema.Types.ObjectId[];
 }
 
 const ImageSchema: Schema<Image> = new Schema({
@@ -12,8 +13,13 @@ const ImageSchema: Schema<Image> = new Schema({
   },
   userId: {
     type: Schema.Types.ObjectId,
-    require: true,
+    require: false,
     ref: "Usuarios"
+  },
+  home: {
+    type: [Schema.Types.ObjectId],
+    require: false,
+    ref: "Homes"
   },
 });
 
