@@ -6,6 +6,7 @@
 dist
 node_modules
 .pnp.js
+.dist
 
 # testing
 /coverage

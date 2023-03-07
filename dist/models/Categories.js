@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Homes = void 0;
+exports.Categories = void 0;
 const mongoose_1 = require("mongoose");
 const CategoriesSchema = new mongoose_1.Schema({
     name: {
@@ -8,5 +8,5 @@ const CategoriesSchema = new mongoose_1.Schema({
         require: true
     }
 });
-exports.Homes = (0, mongoose_1.model)("Homes", CategoriesSchema);
+exports.Categories = (0, mongoose_1.model)("Categories", CategoriesSchema);
 //# sourceMappingURL=Categories.js.map

@@ -15,10 +15,11 @@ class ImageController {
     UploadImage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { dataImg, userId } = req.body;
+                const { dataImg, userId, nameImg } = req.body;
                 if (!dataImg || !userId)
                     return;
                 const createImg = yield Images_1.Images.create({
+                    nameImg,
                     dataImg,
                     userId,
                 });

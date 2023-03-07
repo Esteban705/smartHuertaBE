@@ -3,6 +3,7 @@ import { ObjectId } from "mongoose";
 import { Images } from "../models/Images";
 
 export type CreateImg = {
+  name: string;
   dataImg: string;
   userId?: ObjectId;
   homeId?: ObjectId;
@@ -20,11 +21,12 @@ export class ImageController {
     res: Response
   ): Promise<Response<ResponseImg>> {
     try {
-      const { dataImg, userId } = req.body;
+      const { dataImg, userId, nameImg } = req.body;
 
       if (!dataImg || !userId) return;
 
       const createImg: CreateImg = await Images.create({
+        nameImg,
         dataImg,
         userId,
       });
