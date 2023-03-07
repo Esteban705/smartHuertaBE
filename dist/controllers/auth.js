@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
+const ImageServices_1 = require("./../service/ImageServices");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const Usuario_1 = require("../models/Usuario");
 const Images_1 = require("../models/Images");
@@ -67,14 +68,13 @@ class UserController {
                         msg: "Password incorrecto",
                     });
                 }
-                const userData = {
+                return res.status(200).send({
                     email: usuario.email,
                     isNew: false,
                     id: usuario.id,
                     name: usuario.name,
                     ok: true,
-                };
-                return res.status(200).send(userData);
+                });
             }
             catch (error) {
                 console.log(error);
@@ -90,16 +90,48 @@ class UserController {
             try {
                 const { userId } = req.params;
                 const usuario = yield Usuario_1.Usuarios.findOne({ _id: userId });
-                const imga = yield Images_1.Images.findOne({
-                    userId: userId,
-                });
                 if (!usuario) {
                     return res.status(400).json({
                         ok: false,
                         msg: "El usuario no existe",
                     });
                 }
-                return res.status(200).send({ ok: true, usuario, imga });
+                return res.status(200).send({ ok: true, usuario });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    ok: false,
+                    msg: "Por favor hable con el administrador",
+                });
+            }
+        });
+    }
+    editUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const imageService = new ImageServices_1.ImageService();
+                const { userId } = req.params;
+                const dataUser = req.body;
+                const { dataImage } = dataUser;
+                const createImg = yield Images_1.Images.create({
+                    name: dataImage.name,
+                    dataImg: dataImage.newEncodedPicture,
+                    userId,
+                });
+                delete dataUser.dataImage;
+                const usuario = yield Usuario_1.Usuarios.findOne({ _id: userId });
+                if (!usuario) {
+                    return res.status(400).json({
+                        ok: false,
+                        msg: "El usuario no existe",
+                    });
+                }
+                const datatoUpdate = Object.assign(Object.assign({}, dataUser), { imgId: createImg._id });
+                const updateUserData = yield Usuario_1.Usuarios.findOneAndUpdate({ _id: userId }, datatoUpdate, {
+                    new: true,
+                });
+                return res.status(200).send({ ok: true, updateUserData });
             }
             catch (error) {
                 console.log(error);

@@ -74,6 +74,41 @@ export class HomeControllers {
     }
   };
 
+
+  public async getAllHomesToUser(
+    req: Request,
+    res: Response
+  ): Promise<Response<any>> {
+    try {
+      
+      const { userId } = req.params;
+
+      const foundUser = await Homes.find({ userId: userId as unknown as ObjectId })
+
+
+
+      return(
+        res.status(201).json({
+          ok: true,
+          foundUser,
+        })
+      )
+
+      
+    } catch (error) {
+      console.log(error);
+      return (
+        res.status(500).json({
+          ok: false,
+          msg: "Por favor hable con el administrador",
+        })
+
+      )
+      
+    }
+  };
+
+
   public async traerCasas(
     req: Request,
     res: Response

@@ -12,6 +12,7 @@ class HomeRouter {
     routes() {
         this.router.get("/", this.HomeControllers.traerCasas);
         this.router.get("/:userId", this.HomeControllers.traerCasa);
+        this.router.get("/user/:userId", this.HomeControllers.getAllHomesToUser);
         this.router.post("/new/home", this.HomeControllers.crearCasa);
         this.router.put("/delete/:homeId", this.HomeControllers.eliminarCasa);
     }

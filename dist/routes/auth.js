@@ -10,9 +10,10 @@ class UserRouter {
         this.routes();
     }
     routes() {
+        this.router.get("/:userId", this.UserController.getDataUser);
         this.router.post("/new", this.UserController.crearUsuario);
         this.router.post("/", this.UserController.loginUsuario);
-        this.router.get("/:userId", this.UserController.getDataUser);
+        this.router.put("/:userId", this.UserController.editUser);
     }
 }
 exports.UserRouter = UserRouter;

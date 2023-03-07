@@ -59,6 +59,26 @@ class HomeControllers {
         });
     }
     ;
+    getAllHomesToUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { userId } = req.params;
+                const foundUser = yield Homes_1.Homes.find({ userId: userId });
+                return (res.status(201).json({
+                    ok: true,
+                    foundUser,
+                }));
+            }
+            catch (error) {
+                console.log(error);
+                return (res.status(500).json({
+                    ok: false,
+                    msg: "Por favor hable con el administrador",
+                }));
+            }
+        });
+    }
+    ;
     traerCasas(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

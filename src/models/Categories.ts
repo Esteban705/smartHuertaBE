@@ -13,4 +13,4 @@ export interface ICategories extends Document {
     }
   });
 
-  export const Homes = model<ICategories>("Homes", CategoriesSchema);
+  export const Categories = model<ICategories>("Categories", CategoriesSchema);

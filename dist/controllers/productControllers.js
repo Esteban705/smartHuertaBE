@@ -34,6 +34,50 @@ class ProductController {
             }
         });
     }
+    productEdit(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const dataToUpdate = req.body;
+                const { productId } = req.params;
+                const productValidation = new ProductValidation_1.ProductValidation();
+                const productService = new ProductServices_1.ProductService();
+                /* const validateDataProduct =
+                  productValidation.validateDataIsNotEmpty(dataToUpdate);
+          
+                if (!validateDataProduct) throw new Error("ValidateData is fail"); */
+                const createProduct = yield productService.productEdit(dataToUpdate, productId);
+                return res.status(201).send({ ok: true, createProduct });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    ok: false,
+                    msg: "Por favor hable con el administrador",
+                });
+            }
+        });
+    }
+    getproductById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { productId } = req.params;
+                const productValidation = new ProductValidation_1.ProductValidation();
+                const productService = new ProductServices_1.ProductService();
+                const validateProductThatExist = yield productValidation.validateProductExist(productId);
+                if (!validateProductThatExist)
+                    throw new Error("The Products not exist");
+                const getProduct = yield productService.getProductById(productId);
+                return res.status(201).send({ ok: true, getProduct });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    ok: false,
+                    msg: "Por favor hable con el administrador",
+                });
+            }
+        });
+    }
     eliminarProducto(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
