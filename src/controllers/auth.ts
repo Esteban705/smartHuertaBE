@@ -99,7 +99,15 @@ export class UserController {
   ): Promise<Response<any>> {
     try {
       const { userId } = req.params;
-      const usuario = await Usuarios.findOne({ _id: userId });
+      const usuario = await Usuarios.findOne({ _id: userId }).populate({
+        path: "idImagen",
+        model: Images,
+        select: {
+          dataImg: 1,
+          _id: 1,
+          name: 1,
+        },
+      });;
 
       if (!usuario) {
         return res.status(400).json({

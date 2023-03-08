@@ -17,6 +17,7 @@ const ImageServices_1 = require("./../service/ImageServices");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const Usuario_1 = require("../models/Usuario");
 const Images_1 = require("../models/Images");
+const ImageValidation_1 = require("../validations/ImageValidation");
 class UserController {
     crearUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -110,16 +111,24 @@ class UserController {
     editUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const imageValidation = new ImageValidation_1.ImageValidation();
                 const imageService = new ImageServices_1.ImageService();
                 const { userId } = req.params;
-                const dataUser = req.body;
+                let dataUser = req.body;
                 const { dataImage } = dataUser;
-                const createImg = yield Images_1.Images.create({
-                    name: dataImage.name,
-                    dataImg: dataImage.newEncodedPicture,
-                    userId,
-                });
+                const validateImageExist = yield imageValidation.ValidateImageExist(dataImage.newEncodedPicture);
                 delete dataUser.dataImage;
+                if (!validateImageExist) {
+                    const createImg = yield Images_1.Images.create({
+                        name: dataImage.name,
+                        dataImg: dataImage.newEncodedPicture,
+                        userId,
+                    });
+                    dataUser = Object.assign(Object.assign({}, dataUser), { imgId: createImg._id });
+                }
+                if (validateImageExist) {
+                    dataUser = Object.assign(Object.assign({}, dataUser), { imgId: validateImageExist._id });
+                }
                 const usuario = yield Usuario_1.Usuarios.findOne({ _id: userId });
                 if (!usuario) {
                     return res.status(400).json({
@@ -127,8 +136,7 @@ class UserController {
                         msg: "El usuario no existe",
                     });
                 }
-                const datatoUpdate = Object.assign(Object.assign({}, dataUser), { imgId: createImg._id });
-                const updateUserData = yield Usuario_1.Usuarios.findOneAndUpdate({ _id: userId }, datatoUpdate, {
+                const updateUserData = yield Usuario_1.Usuarios.findOneAndUpdate({ _id: userId }, dataUser, {
                     new: true,
                 });
                 return res.status(200).send({ ok: true, updateUserData });
