@@ -100,7 +100,7 @@ export class UserController {
     try {
       const { userId } = req.params;
       const usuario = await Usuarios.findOne({ _id: userId }).populate({
-        path: "idImagen",
+        path: "imgId",
         model: Images,
         select: {
           dataImg: 1,
