@@ -19,5 +19,11 @@ export class UserServices {
 
       return updateUserData
   }
+
+  public async getUserById(userId:ObjectId): Promise<any> {
+
+    const getUser = await Usuarios.findById({_id: userId})
+      return getUser
+  }
 }
 

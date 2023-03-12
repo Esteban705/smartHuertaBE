@@ -90,7 +90,16 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { userId } = req.params;
-                const usuario = yield Usuario_1.Usuarios.findOne({ _id: userId });
+                const usuario = yield Usuario_1.Usuarios.findOne({ _id: userId }).populate({
+                    path: "imgId",
+                    model: Images_1.Images,
+                    select: {
+                        dataImg: 1,
+                        _id: 1,
+                        name: 1,
+                    },
+                });
+                ;
                 if (!usuario) {
                     return res.status(400).json({
                         ok: false,

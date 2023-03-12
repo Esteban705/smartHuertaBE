@@ -111,6 +111,28 @@ export class ProductService {
     return getProduct;
   }
 
+  public async getAllProductByUserId(userId: ObjectId): Promise<IProduct[]> {
+
+
+    const getProductAllProducts = await Product.find({
+      idUser: userId as unknown as ObjectId,
+    })
+      .populate({ path: "idUser", model: Usuarios })
+      .populate({ path: "categories", model: Categories })
+      .populate({ path: "idHome", model: Homes })
+      .populate({
+        path: "idImagen",
+        model: Images,
+        select: {
+          dataImg: 1,
+          _id: 1,
+          name: 1,
+        },
+      });
+
+    return getProductAllProducts;
+  }
+
   public async eliminarProducto(productId: ObjectId): Promise<any> {
     const getProduct = await Product.findById({ _id: productId });
 
@@ -128,6 +150,8 @@ export class ProductService {
 
     return eliminatingProducto;
   }
+
+  
 
 
 

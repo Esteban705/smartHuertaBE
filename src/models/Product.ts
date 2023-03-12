@@ -42,7 +42,7 @@ const productSchema: Schema<IProduct> = new Schema({
     require: true,
   },
   idUser: {
-    type: [Schema.Types.ObjectId],
+    type: Schema.Types.ObjectId,
     ref: "Usuarios",
     require: true,
   },

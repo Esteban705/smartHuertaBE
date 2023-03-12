@@ -1,13 +1,16 @@
 import { Request, Response } from "express";
 import { ObjectId } from "mongoose";
-import { Product } from "../models/Product";
+import { IProduct, Product } from "../models/Product";
+import { IUser } from "../models/Usuario";
 import { ProductService } from "../service/ProductServices";
+import { UserServices } from "../service/UserServices";
 import { IDataProduct } from "../types/ProductType";
 import { ProductValidation } from "../validations/ProductValidation";
 
 export class ProductController {
   private ProductValidation: ProductValidation;
   private ProductService: ProductService;
+  private UserServices: UserServices;
 
   public async crearProducto(
     req: Request,
@@ -44,7 +47,6 @@ export class ProductController {
       const dataToUpdate: IDataProduct = req.body;
 
       const { productId } = req.params;
-      
 
       const productValidation = new ProductValidation();
       const productService = new ProductService();
@@ -54,7 +56,10 @@ export class ProductController {
 
       if (!validateDataProduct) throw new Error("ValidateData is fail"); */
 
-      const createProduct = await productService.productEdit(dataToUpdate, productId);
+      const createProduct = await productService.productEdit(
+        dataToUpdate,
+        productId
+      );
 
       return res.status(201).send({ ok: true, createProduct });
     } catch (error) {
@@ -65,8 +70,6 @@ export class ProductController {
       });
     }
   }
-
-
 
   public async getproductById(
     req: Request,
@@ -86,6 +89,32 @@ export class ProductController {
       const getProduct = await productService.getProductById(productId);
 
       return res.status(201).send({ ok: true, getProduct });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        ok: false,
+        msg: "Por favor hable con el administrador",
+      });
+    }
+  }
+
+  public async getAllProductByUserId(
+    req: Request,
+    res: Response
+  ): Promise<Response<void>> {
+    try {
+      const userServices = new UserServices();
+      const productServices = new ProductService();
+      const getDataOfUser: IUser = await userServices.getUserById(
+        req.params.userId as unknown as ObjectId
+      );
+      const getAllProduct = await productServices.getAllProductByUserId(
+        getDataOfUser._id
+      );
+
+      console.log(getAllProduct)
+
+      return res.status(201).send({ ok: true, getAllProduct });
     } catch (error) {
       console.log(error);
       res.status(500).json({
