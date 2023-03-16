@@ -98,6 +98,26 @@ class ProductService {
             return getProduct;
         });
     }
+    getAllProductByUserId(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const getProductAllProducts = yield Product_1.Product.find({
+                idUser: userId,
+            })
+                .populate({ path: "idUser", model: Usuario_1.Usuarios })
+                .populate({ path: "categories", model: Categories_1.Categories })
+                .populate({ path: "idHome", model: Homes_1.Homes })
+                .populate({
+                path: "idImagen",
+                model: Images_1.Images,
+                select: {
+                    dataImg: 1,
+                    _id: 1,
+                    name: 1,
+                },
+            });
+            return getProductAllProducts;
+        });
+    }
     eliminarProducto(productId) {
         return __awaiter(this, void 0, void 0, function* () {
             const getProduct = yield Product_1.Product.findById({ _id: productId });

@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductController = void 0;
 const ProductServices_1 = require("../service/ProductServices");
+const UserServices_1 = require("../service/UserServices");
 const ProductValidation_1 = require("../validations/ProductValidation");
 class ProductController {
     crearProducto(req, res) {
@@ -68,6 +69,25 @@ class ProductController {
                     throw new Error("The Products not exist");
                 const getProduct = yield productService.getProductById(productId);
                 return res.status(201).send({ ok: true, getProduct });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    ok: false,
+                    msg: "Por favor hable con el administrador",
+                });
+            }
+        });
+    }
+    getAllProductByUserId(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userServices = new UserServices_1.UserServices();
+                const productServices = new ProductServices_1.ProductService();
+                const getDataOfUser = yield userServices.getUserById(req.params.userId);
+                const getAllProduct = yield productServices.getAllProductByUserId(getDataOfUser._id);
+                console.log(getAllProduct);
+                return res.status(201).send({ ok: true, getAllProduct });
             }
             catch (error) {
                 console.log(error);

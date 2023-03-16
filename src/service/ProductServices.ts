@@ -56,12 +56,12 @@ export class ProductService {
 
       for (const img of images) {
         const dataImg = img as unknown as IBodyImg;
+        
+        
+        const validateExistImg = this.validateImageExist(dataImg.newEncodedPicture)
 
-          const validateExistImg = this.validateImageExist(dataImg.newEncodedPicture)
 
-
-          console.log(validateExistImg)
-
+        console.log(validateExistImg)
    /*      const { name, newEncodedPicture } = dataImg;
 
         const creatingImg: any = await Images.create({
