@@ -15,7 +15,7 @@ export interface IProduct extends Document {
   categories: ICategory[]
   idUser: ObjectId;
   idHome: ObjectId;
-  idImagen: Image[];
+  idImagen: string[];
 
 }
 

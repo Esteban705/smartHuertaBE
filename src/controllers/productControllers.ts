@@ -4,7 +4,7 @@ import { IProduct, Product } from "../models/Product";
 import { IUser } from "../models/Usuario";
 import { ProductService } from "../service/ProductServices";
 import { UserServices } from "../service/UserServices";
-import { IDataProduct } from "../types/ProductType";
+import { IDataProduct } from "../types/productType";
 import { ProductValidation } from "../validations/ProductValidation";
 
 export class ProductController {
@@ -51,10 +51,12 @@ export class ProductController {
       const productValidation = new ProductValidation();
       const productService = new ProductService();
 
-      /* const validateDataProduct =
-        productValidation.validateDataIsNotEmpty(dataToUpdate);
+      const validateDataProduct = await productValidation.validateProductExist(
+        productId
+      );
 
-      if (!validateDataProduct) throw new Error("ValidateData is fail"); */
+      if (!validateDataProduct)
+        return res.status(201).send({ ok: true, data: [] });
 
       const createProduct = await productService.productEdit(
         dataToUpdate,
@@ -78,6 +80,8 @@ export class ProductController {
     try {
       const { productId } = req.params;
 
+      if (productId === "0")
+        return res.status(201).send({ ok: true, data: [] });
       const productValidation = new ProductValidation();
       const productService = new ProductService();
 
@@ -111,8 +115,6 @@ export class ProductController {
       const getAllProduct = await productServices.getAllProductByUserId(
         getDataOfUser._id
       );
-
-      console.log(getAllProduct)
 
       return res.status(201).send({ ok: true, getAllProduct });
     } catch (error) {

@@ -17,5 +17,6 @@ export interface IDataProduct {
     images:IImage[];
     productName: string;
     userId: ObjectId;
-
 }
+
+

@@ -42,17 +42,16 @@ class ProductController {
                 const { productId } = req.params;
                 const productValidation = new ProductValidation_1.ProductValidation();
                 const productService = new ProductServices_1.ProductService();
-                /* const validateDataProduct =
-                  productValidation.validateDataIsNotEmpty(dataToUpdate);
-          
-                if (!validateDataProduct) throw new Error("ValidateData is fail"); */
+                const validateDataProduct = yield productValidation.validateProductExist(productId);
+                if (!validateDataProduct)
+                    return (res.status(201).send({ ok: true, data: [] }));
                 const createProduct = yield productService.productEdit(dataToUpdate, productId);
                 return res.status(201).send({ ok: true, createProduct });
             }
             catch (error) {
                 console.log(error);
                 res.status(500).json({
-                    ok: false,
+                    ok: true,
                     msg: "Por favor hable con el administrador",
                 });
             }
@@ -62,6 +61,8 @@ class ProductController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { productId } = req.params;
+                if (productId === '0')
+                    return (res.status(201).send({ ok: true, data: [] }));
                 const productValidation = new ProductValidation_1.ProductValidation();
                 const productService = new ProductServices_1.ProductService();
                 const validateProductThatExist = yield productValidation.validateProductExist(productId);
@@ -86,7 +87,6 @@ class ProductController {
                 const productServices = new ProductServices_1.ProductService();
                 const getDataOfUser = yield userServices.getUserById(req.params.userId);
                 const getAllProduct = yield productServices.getAllProductByUserId(getDataOfUser._id);
-                console.log(getAllProduct);
                 return res.status(201).send({ ok: true, getAllProduct });
             }
             catch (error) {

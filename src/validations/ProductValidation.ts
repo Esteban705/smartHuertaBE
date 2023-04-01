@@ -1,6 +1,6 @@
 import { ObjectId } from "mongoose";
 import { Product } from "../models/Product";
-import { IDataProduct } from "../types/ProductType";
+import { IDataProduct } from "../types/productType";
 
 export class ProductValidation {
   public validateDataIsNotEmpty(productData: IDataProduct): Boolean {
@@ -20,7 +20,7 @@ export class ProductValidation {
 
   public async validateProductExist(productId): Promise<Boolean> {
     const getProduct = await Product.findById({
-      _id: productId as unknown as ObjectId,
+      _id: productId,
     });
 
     if (!getProduct) {

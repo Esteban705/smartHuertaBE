@@ -42,35 +42,29 @@ class ProductService {
         });
     }
     productEdit(dataProduct, idProduct) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { images, home, userId } = dataProduct;
                 let imagesCreated = [];
                 for (const img of images) {
                     const dataImg = img;
-                    const validateExistImg = this.validateImageExist(dataImg.newEncodedPicture);
-                    console.log(validateExistImg);
-                    /*      const { name, newEncodedPicture } = dataImg;
-                 
-                         const creatingImg: any = await Images.create({
-                           name,
-                           dataImg: newEncodedPicture,
-                           home,
-                         });
-                 
-                         imagesCreated.push(creatingImg._id); */
+                    const validateExistImg = yield this.validateImageExist((_a = dataImg.newEncodedPicture) !== null && _a !== void 0 ? _a : dataImg.dataImg);
+                    if (validateExistImg)
+                        return (imagesCreated.push(validateExistImg._id));
+                    const { name, newEncodedPicture } = dataImg;
+                    const creatingImg = yield Images_1.Images.create({
+                        name,
+                        dataImg: newEncodedPicture,
+                        home,
+                    });
+                    imagesCreated.push(creatingImg._id);
                 }
-                /*       const update =
-                        {
-                          ...dataProduct,
-                          idHome: home,
-                          idUser: userId,
-                          idImagen: imagesCreated,
-                        }
-                      
-                
-                      const updateProduct = await Product.findOneAndUpdate(idProduct ,update); */
-                return 'updateProduct';
+                const update = Object.assign(Object.assign({}, dataProduct), { home: home, idUser: userId, images: imagesCreated });
+                const filter = { _id: idProduct };
+                const updateProduct = yield Product_1.Product.findOneAndUpdate(filter, update);
+                console.log(updateProduct);
+                return updateProduct;
             }
             catch (error) {
                 console.log(error);
@@ -135,7 +129,8 @@ class ProductService {
     }
     validateImageExist(dataImg) {
         return __awaiter(this, void 0, void 0, function* () {
-            const findImage = Images_1.Images.findOne({ dataImg });
+            const findImage = yield Images_1.Images.findOne({ dataImg });
+            return findImage;
             console.log(findImage);
         });
     }

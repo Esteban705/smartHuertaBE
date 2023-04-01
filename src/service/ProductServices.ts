@@ -1,15 +1,16 @@
 import { Images } from "./../models/Images";
 import { ObjectId } from "mongoose";
 import { IProduct, Product } from "./../models/Product";
-import { IDataProduct } from "../types/ProductType";
 import { CreateImg } from "../controllers/image";
 import { Usuarios } from "../models/Usuario";
 import { Homes } from "../models/Homes";
 import { Categories } from "../models/Categories";
+import { IDataProduct } from "../types/productType";
 
 export type IBodyImg = {
   name: string;
   newEncodedPicture: string;
+  dataImg?: string;
 };
 
 export class ProductService {
@@ -24,13 +25,23 @@ export class ProductService {
 
         const { name, newEncodedPicture } = dataImg;
 
-        const creatingImg: any = await Images.create({
-          name,
-          dataImg: newEncodedPicture,
-          home,
-        });
+        const validateExistImg = await this.validateImageExist(
+          dataImg.newEncodedPicture ?? dataImg.dataImg
+        );
 
-        imagesCreated.push(creatingImg._id);
+        if (validateExistImg) {
+          imagesCreated.push(validateExistImg._id);
+        }
+
+        if (!validateExistImg) {
+          const creatingImg: any = await Images.create({
+            name,
+            dataImg: newEncodedPicture,
+            home,
+          });
+
+          imagesCreated.push(creatingImg._id);
+        }
       }
 
       const createProduct = await Product.create({
@@ -39,7 +50,6 @@ export class ProductService {
         idUser: userId,
         idImagen: imagesCreated,
       });
-      console.log({ createProduct });
       return createProduct;
     } catch (error) {
       console.log(error);
@@ -47,8 +57,10 @@ export class ProductService {
     }
   }
 
-
-  public async productEdit(dataProduct: IDataProduct, idProduct: string): Promise<any> {
+  public async productEdit(
+    dataProduct: IDataProduct,
+    idProduct: string
+  ): Promise<any> {
     try {
       const { images, home, userId } = dataProduct;
 
@@ -56,35 +68,47 @@ export class ProductService {
 
       for (const img of images) {
         const dataImg = img as unknown as IBodyImg;
-        
-        
-        const validateExistImg = this.validateImageExist(dataImg.newEncodedPicture)
 
+        const validateExistImg = await this.validateImageExist(
+          dataImg.newEncodedPicture ?? dataImg.dataImg
+        );
 
-        console.log(validateExistImg)
-   /*      const { name, newEncodedPicture } = dataImg;
+        if (validateExistImg) {
+          imagesCreated.push(validateExistImg._id);
+        }
 
-        const creatingImg: any = await Images.create({
-          name,
-          dataImg: newEncodedPicture,
-          home,
-        });
+        if (!validateExistImg) {
+          const { name, newEncodedPicture } = dataImg;
 
-        imagesCreated.push(creatingImg._id); */
+          const creatingImg: any = await Images.create({
+            name,
+            dataImg: newEncodedPicture,
+            home,
+          });
+
+          imagesCreated.push(creatingImg._id);
+        }
       }
 
-/*       const update =
-        {
-          ...dataProduct,
-          idHome: home,
-          idUser: userId,
-          idImagen: imagesCreated,
-        }
-      
+      /*  await this.deleteUnusedImage(imagesCreated, idProduct); */
 
-      const updateProduct = await Product.findOneAndUpdate(idProduct ,update); */
+      const update = {
+        ...dataProduct,
+        idUser: userId,
+        idImagen: imagesCreated,
+        idHome: home,
+      };
 
-      return 'updateProduct';
+      const filter = { _id: idProduct };
+
+      const updateProduct = await Product.findOneAndUpdate(
+        filter,
+        update as unknown as IProduct
+      );
+
+      console.log(updateProduct);
+
+      return updateProduct;
     } catch (error) {
       console.log(error);
       throw new Error("ValidateData is fail");
@@ -112,8 +136,6 @@ export class ProductService {
   }
 
   public async getAllProductByUserId(userId: ObjectId): Promise<IProduct[]> {
-
-
     const getProductAllProducts = await Product.find({
       idUser: userId as unknown as ObjectId,
     })
@@ -151,15 +173,27 @@ export class ProductService {
     return eliminatingProducto;
   }
 
-  
+  private async validateImageExist(dataImg: string): Promise<any> {
+    const findImage = await Images.findOne({ dataImg });
 
-
-
-   private async validateImageExist(dataImg: string): Promise<any> {
-
-    const findImage = Images.findOne({ dataImg })
-  
-
-   console.log(findImage)
+    return findImage;
   }
+
+  /* private async deleteUnusedImage(dataImg: string[], idProduct:string): Promise<any> {
+
+
+    const product:IProduct = await Product.findOne({_id: idProduct})
+
+
+
+    const imagesToDelete = product.idImagen.filter(produc => dataImg.some(img => img !== produc))
+
+
+
+    
+    for (const imgDelete of imagesToDelete) {
+      const creatingImg: any = await Images.deleteOne({ _id: imgDelete as unknown as ObjectId });
+      console.log("delete images...", creatingImg);
+    }
+  } */
 }
