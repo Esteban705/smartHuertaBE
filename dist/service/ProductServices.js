@@ -17,6 +17,7 @@ const Homes_1 = require("../models/Homes");
 const Categories_1 = require("../models/Categories");
 class ProductService {
     crearProducto(dataProduct) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { images, home, userId } = dataProduct;
@@ -24,15 +25,20 @@ class ProductService {
                 for (const img of images) {
                     const dataImg = img;
                     const { name, newEncodedPicture } = dataImg;
-                    const creatingImg = yield Images_1.Images.create({
-                        name,
-                        dataImg: newEncodedPicture,
-                        home,
-                    });
-                    imagesCreated.push(creatingImg._id);
+                    const validateExistImg = yield this.validateImageExist((_a = dataImg.newEncodedPicture) !== null && _a !== void 0 ? _a : dataImg.dataImg);
+                    if (validateExistImg) {
+                        imagesCreated.push(validateExistImg._id);
+                    }
+                    if (!validateExistImg) {
+                        const creatingImg = yield Images_1.Images.create({
+                            name,
+                            dataImg: newEncodedPicture,
+                            home,
+                        });
+                        imagesCreated.push(creatingImg._id);
+                    }
                 }
                 const createProduct = yield Product_1.Product.create(Object.assign(Object.assign({}, dataProduct), { idHome: home, idUser: userId, idImagen: imagesCreated }));
-                console.log({ createProduct });
                 return createProduct;
             }
             catch (error) {
@@ -50,17 +56,21 @@ class ProductService {
                 for (const img of images) {
                     const dataImg = img;
                     const validateExistImg = yield this.validateImageExist((_a = dataImg.newEncodedPicture) !== null && _a !== void 0 ? _a : dataImg.dataImg);
-                    if (validateExistImg)
-                        return (imagesCreated.push(validateExistImg._id));
-                    const { name, newEncodedPicture } = dataImg;
-                    const creatingImg = yield Images_1.Images.create({
-                        name,
-                        dataImg: newEncodedPicture,
-                        home,
-                    });
-                    imagesCreated.push(creatingImg._id);
+                    if (validateExistImg) {
+                        imagesCreated.push(validateExistImg._id);
+                    }
+                    if (!validateExistImg) {
+                        const { name, newEncodedPicture } = dataImg;
+                        const creatingImg = yield Images_1.Images.create({
+                            name,
+                            dataImg: newEncodedPicture,
+                            home,
+                        });
+                        imagesCreated.push(creatingImg._id);
+                    }
                 }
-                const update = Object.assign(Object.assign({}, dataProduct), { home: home, idUser: userId, images: imagesCreated });
+                /*  await this.deleteUnusedImage(imagesCreated, idProduct); */
+                const update = Object.assign(Object.assign({}, dataProduct), { idUser: userId, idImagen: imagesCreated, idHome: home });
                 const filter = { _id: idProduct };
                 const updateProduct = yield Product_1.Product.findOneAndUpdate(filter, update);
                 console.log(updateProduct);
@@ -131,7 +141,6 @@ class ProductService {
         return __awaiter(this, void 0, void 0, function* () {
             const findImage = yield Images_1.Images.findOne({ dataImg });
             return findImage;
-            console.log(findImage);
         });
     }
 }

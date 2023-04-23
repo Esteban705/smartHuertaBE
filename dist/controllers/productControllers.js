@@ -44,14 +44,14 @@ class ProductController {
                 const productService = new ProductServices_1.ProductService();
                 const validateDataProduct = yield productValidation.validateProductExist(productId);
                 if (!validateDataProduct)
-                    return (res.status(201).send({ ok: true, data: [] }));
+                    return res.status(201).send({ ok: true, data: [] });
                 const createProduct = yield productService.productEdit(dataToUpdate, productId);
                 return res.status(201).send({ ok: true, createProduct });
             }
             catch (error) {
                 console.log(error);
                 res.status(500).json({
-                    ok: true,
+                    ok: false,
                     msg: "Por favor hable con el administrador",
                 });
             }
@@ -61,8 +61,8 @@ class ProductController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { productId } = req.params;
-                if (productId === '0')
-                    return (res.status(201).send({ ok: true, data: [] }));
+                if (productId === "0")
+                    return res.status(201).send({ ok: true, data: [] });
                 const productValidation = new ProductValidation_1.ProductValidation();
                 const productService = new ProductServices_1.ProductService();
                 const validateProductThatExist = yield productValidation.validateProductExist(productId);

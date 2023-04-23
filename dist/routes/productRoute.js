@@ -11,11 +11,11 @@ class ProductRoute {
     }
     routes() {
         /* this.router.get("/", this.ProductController.getAllProduct); */
+        this.router.post("/", this.ProductController.crearProducto);
         this.router.get("/:productId", this.ProductController.getproductById);
         this.router.get("/allproducts/:userId", this.ProductController.getAllProductByUserId);
-        this.router.post("/", this.ProductController.crearProducto);
         this.router.put("/:productId", this.ProductController.productEdit);
-        this.router.delete("/:productId", this.ProductController.eliminarProducto);
+        this.router.put("/delete/:productId", this.ProductController.eliminarProducto);
     }
 }
 exports.ProductRoute = ProductRoute;
